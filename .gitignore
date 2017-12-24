@@ -2,3 +2,4 @@
 lib/
 static/
 *.yaml
+rest_/settings.py
