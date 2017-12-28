@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import *
 from .serializers import *
+from rest_framework import status
 
 
 class NoteList(generics.ListAPIView):
@@ -16,6 +17,14 @@ class NotesList(APIView):
         notes = Notes.objects.all()
         serializer_class = NotesSerializer(notes, many=True)
         return Response(serializer_class.data)
+
+    @staticmethod
+    def post(request, format=None):
+        serializer = NotesSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class NameList(APIView):
